@@ -33,6 +33,7 @@
 #include "comm.h"
 #include "timer.h"
 #include "proto.h"
+#include "phoenix.h"
 
 int main(int argc, char** argv)
 {
@@ -45,6 +46,8 @@ int main(int argc, char** argv)
    ierr = MPI_Errhandler_set(MPI_COMM_WORLD, MPI_ERRORS_ARE_FATAL);
    ierr = MPI_Comm_rank(MPI_COMM_WORLD, &my_pe);
    ierr = MPI_Comm_size(MPI_COMM_WORLD, &num_pes);
+
+   px_init(my_pe,num_pes);
 
    counter_malloc = 0;
    size_malloc = 0.0;
@@ -294,8 +297,12 @@ int main(int argc, char** argv)
 
    profile();
 
-   deallocate();
 
+   px_finalize();
+
+   deallocate();
+	
+   printf("caling mpi finalize\n");
    MPI_Finalize();
 
    exit(0);
@@ -547,7 +554,7 @@ void deallocate(void)
       free(blocks[n].array);
    }
    free(blocks);
-
+   printf("done freeing blocks\n");
    free(sorted_list);
    free(sorted_index);
 

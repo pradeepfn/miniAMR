@@ -3,7 +3,7 @@
 // miniAMR: stencil computations with boundary exchange and AMR.
 //
 // Copyright (2014) Sandia Corporation. Under the terms of Contract
-// DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government 
+// DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government
 // retains certain rights in this software.
 //
 // This library is free software; you can redistribute it and/or modify
@@ -32,25 +32,46 @@
 #include "comm.h"
 #include "proto.h"
 #include "timer.h"
+#include "phoenix.h"
+
+
+int get_nblocks(){
+	int tot=0, m;
+	for (m=0 ; m < max_num_blocks; m++){
+		if(blocks[m].number >= 0){ // valid block
+			tot++;
+		}
+	}
+	return tot;
+}
+
 
 double timer(void)
 {
-   return(MPI_Wtime());
+	return(MPI_Wtime());
 }
 
+int var_counter=0;
 void *ma_malloc(size_t size, char *file, int line)
 {
-   void *ptr;
+	void *ptr;
+	char varname[10];
+	snprintf(varname,sizeof(varname),"var%d",var_counter++);
+	//if(size < 27648000 || size > 27648004){
+	if(size < 4096){
+		ptr = (void *) malloc(size);
+	}else{
+		ptr = (void *)alloc_c(varname,size,0,my_pe);
+		printf("allocating memory of size %ld\n",size);
+	}
 
-   ptr = (void *) malloc(size);
+	if (ptr == NULL) {
+		printf("NULL pointer from malloc call in %s at %d\n", file, line);
+		exit(-1);
+	}
 
-   if (ptr == NULL) {
-      printf("NULL pointer from malloc call in %s at %d\n", file, line);
-      exit(-1);
-   }
+	counter_malloc++;
+	size_malloc += (double) size;
 
-   counter_malloc++;
-   size_malloc += (double) size;
-
-   return(ptr);
+	return(ptr);
 }

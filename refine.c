@@ -40,6 +40,7 @@ void refine(int ts)
        nm_r, nm_c, nm_t;
    double ratio, tp, tm, tu, tp1, tm1, tu1, t1, t2, t3, t4, t5;
    block *bp;
+   int beb,afb, endb;
 
    nrs++;
    nm_r = nm_c = nm_t = 0;
@@ -110,7 +111,9 @@ void refine(int ts)
       t4 += t5 - t2;
 
       t2 = timer();
+	  beb = get_nblocks();
       split_blocks();
+	  afb = get_nblocks();
       t5 = timer();
       timer_refine_sb += t5 - t2;
       t4 += t5 - t2;
@@ -156,6 +159,7 @@ void refine(int ts)
              ratio > ((double) inbalance/100.0)) {
             nlbs++;
             t2 = timer();
+			// load balance step
             load_balance();
             t5 = timer();
             timer_lb_all += t5 - t2;
@@ -242,6 +246,10 @@ void refine(int ts)
          t4 += timer() - t2;
       }
    }
+	endb=get_nblocks();
+	  if(my_pe == 8) {
+		printf("[%d] before,after,end aplit : %d , %d, %d \n", my_pe,beb, afb,endb);
+	  }
    num_moved_rs += nm_r;
    num_moved_coarsen += nm_c;
    num_moved_reduce += nm_t;
