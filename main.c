@@ -47,7 +47,7 @@ int main(int argc, char** argv)
    ierr = MPI_Comm_rank(MPI_COMM_WORLD, &my_pe);
    ierr = MPI_Comm_size(MPI_COMM_WORLD, &num_pes);
 
-   px_init(my_pe,num_pes);
+   px_init(my_pe);
 
    counter_malloc = 0;
    size_malloc = 0.0;

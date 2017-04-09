@@ -146,7 +146,7 @@ void checkpoint(void){
 	int niblk=0;
 	unsigned long blk_size;
 
-	app_snapshot();
+	px_snapshot();
 	for (n = 0; n < max_num_blocks; n++) {
 		if(blocks[n].number >= 0){
 			nvblk++;
