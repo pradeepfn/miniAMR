@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <mpi.h>
+#include <assert.h>
 
 #include "block.h"
 #include "comm.h"
@@ -61,8 +62,11 @@ void *ma_malloc(size_t size, char *file, int line)
 	if(size < 4096){
 		ptr = (void *) malloc(size);
 	}else{
-		ptr = (void *)alloc_c(varname,size,0,my_pe);
-		printf("allocating memory of size %ld\n",size);
+		px_obj temp;
+		px_create(varname,size,&temp);
+		assert(size == temp.size);
+		ptr = temp.data;
+		//printf("allocating memory of size %ld\n",size);
 	}
 
 	if (ptr == NULL) {
