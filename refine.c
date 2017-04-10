@@ -247,9 +247,9 @@ void refine(int ts)
       }
    }
 	endb=get_nblocks();
-	  if(my_pe == 8) {
+	  /*if(my_pe == 8) {
 		printf("[%d] before,after,end aplit : %d , %d, %d \n", my_pe,beb, afb,endb);
-	  }
+	  }*/
    num_moved_rs += nm_r;
    num_moved_coarsen += nm_c;
    num_moved_reduce += nm_t;

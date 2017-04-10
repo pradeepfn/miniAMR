@@ -56,16 +56,18 @@ int var_counter=0;
 void *ma_malloc(size_t size, char *file, int line)
 {
 	void *ptr;
-	char varname[10];
-	snprintf(varname,sizeof(varname),"var%d",var_counter++);
+	char varname[20];
+	snprintf(varname,sizeof(varname),"var%d",var_counter);
 	//if(size < 27648000 || size > 27648004){
 	if(size < 4096){
 		ptr = (void *) malloc(size);
+		malloc_counter++;
 	}else{
 		px_obj temp;
 		px_create(varname,size,&temp);
 		assert(size == temp.size);
 		ptr = temp.data;
+		var_counter++;
 		//printf("allocating memory of size %ld\n",size);
 	}
 

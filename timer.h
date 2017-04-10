@@ -111,6 +111,7 @@ int counter_bc[3];
 int counter_same[3];
 int counter_diff[3];
 int counter_malloc;
+long malloc_counter;
 double size_malloc;
 int counter_malloc_init;
 double size_malloc_init;

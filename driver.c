@@ -126,14 +126,14 @@ void driver(void)
 		timer_plot += timer() - t3;
 
 
-		if(comm_stage % (num_refine*100)){
 			//printf("step : %d , current comm stage : %d \n", ts, comm_stage);
+			/* we checkpoint after each time step  */
 			checkpoint();
-		}
 
 	}
 	timer_all = timer() - t1;
-
+	
+	printf("[%d] total malloced - %lu \n", my_pe,malloc_counter);
 	MARKER_STOP(my_pe);
 }
 
@@ -147,7 +147,7 @@ void checkpoint(void){
 	unsigned long blk_size;
 
 	px_snapshot();
-	for (n = 0; n < max_num_blocks; n++) {
+/*	for (n = 0; n < max_num_blocks; n++) {
 		if(blocks[n].number >= 0){
 			nvblk++;
 		}
@@ -159,8 +159,8 @@ void checkpoint(void){
 	MPI_Reduce(&nvblk,&min,1,MPI_INTEGER,MPI_MIN,0,MPI_COMM_WORLD);
 	if(!my_pe){
 		printf("block size : %lu\n", blk_size);
-		//printf("total blocks : %d , nvblk : %d \n",max_num_blocks,nvblk);
+		printf("total blocks : %d , nvblk : %d \n",max_num_blocks,nvblk);
 		printf("total blocks : %d , max_blocks : %d , min_block : %d \n",max_num_blocks,max,min);
-	}
+	} */
 	return;
 }
