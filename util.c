@@ -63,12 +63,17 @@ void *ma_malloc(size_t size, char *file, int line)
 		ptr = (void *) malloc(size);
 		malloc_counter++;
 	}else{
+#ifdef _YUMA
 		px_obj temp;
 		px_create(varname,size,&temp);
 		assert(size == temp.size);
 		ptr = temp.data;
 		var_counter++;
-		//printf("allocating memory of size %ld\n",size);
+	//	printf("allocating memory of size %ld\n",size);
+#else
+		ptr = (void *) malloc(size);
+		malloc_counter++;
+#endif
 	}
 
 	if (ptr == NULL) {

@@ -302,7 +302,7 @@ int main(int argc, char** argv)
 
    deallocate();
 	
-   printf("caling mpi finalize\n");
+   //printf("caling mpi finalize\n");
    MPI_Finalize();
 
    exit(0);
@@ -554,7 +554,7 @@ void deallocate(void)
       free(blocks[n].array);
    }
    free(blocks);
-   printf("done freeing blocks\n");
+   //printf("done freeing blocks\n");
    free(sorted_list);
    free(sorted_index);
 
